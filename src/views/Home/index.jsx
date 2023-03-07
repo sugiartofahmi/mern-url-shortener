@@ -53,7 +53,7 @@ const Home = () => {
 
       <Suspense fallback={<Loading />}>
         <div className="flex flex-col items-center justify-center mt-7 space-y-4 md:space-y-0 md:space-x-4 md:flex-row ">
-          {short.ok && (
+          {url !== "" && short.ok && (
             <div className="inline-flex items-center justify-center  text-black border-2 border-black ">
               <h1 className="max-w-[35vh] truncate px-2 py-2 outline-none">
                 {short.result.full_short_link}
