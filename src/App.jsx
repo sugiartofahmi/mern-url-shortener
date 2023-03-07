@@ -1,22 +1,18 @@
-import { lazy, Suspense, useEffect } from "react";
-import { numberState, counterState } from "./store";
-
-import { useRecoilValue } from "recoil";
+import { Suspense, lazy } from "react";
 import Router from "./router";
+const MainLayout = lazy(() => import("./layouts/MainLayout"));
+const ContentLayout = lazy(() => import("./layouts/ContentLayout"));
+const Loading = lazy(() => import("./components/Loading"));
 const App = () => {
-  const number = useRecoilValue(numberState);
-  const fungsi = useRecoilValue(counterState);
-  const pencet = () => {
-    fungsi();
-    console.log(number);
-  };
   return (
-    <Suspense fallback="Loading...">
-      <Suspense fallback="Loading...">
-        <h1>{number}</h1>
-        <button onClick={pencet}>tambah</button>
-        <Router />
-      </Suspense>
+    <Suspense fallback={<Loading />}>
+      <MainLayout>
+        <Suspense fallback={<Loading />}>
+          <ContentLayout>
+            <Router />
+          </ContentLayout>
+        </Suspense>
+      </MainLayout>
     </Suspense>
   );
 };
