@@ -13,7 +13,7 @@ export const fetchUrl = selector({
     };
     if (get(urlState) !== "") {
       try {
-        const res = await axios.get(`https://api.shrtco.de/v2/shorten`, {
+        const res = await axios.get(import.meta.env.VITE_API_URL, {
           params: query,
         });
         return res.data || {};
