@@ -1,11 +1,24 @@
 import { selector, atom } from "recoil";
 
-export const numberState = atom({
-  key: "number-state",
-  default: 1,
+export const queryState = atom({
+  key: "query-state",
+  default: "",
 });
 
-export const counterState = selector({
-  key: "counter-state",
-  get: ({ get }) => {},
+export const fetchUrl = selector({
+  key: "fetch-url",
+  get: async ({ get }) => {
+    try {
+      const res = await axios(`https://api.shrtco.de/v2/shorten`, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: get(queryState),
+      });
+      return res.data.articles || {};
+    } catch (error) {
+      console.log(error);
+    }
+  },
 });
