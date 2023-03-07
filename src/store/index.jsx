@@ -1,24 +1,27 @@
 import { selector, atom } from "recoil";
-
-export const queryState = atom({
-  key: "query-state",
+import axios from "axios";
+export const urlState = atom({
+  key: "url-state",
   default: "",
 });
 
 export const fetchUrl = selector({
   key: "fetch-url",
   get: async ({ get }) => {
-    try {
-      const res = await axios(`https://api.shrtco.de/v2/shorten`, {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        params: get(queryState),
-      });
-      return res.data.articles || {};
-    } catch (error) {
-      console.log(error);
+    const query = {
+      url: get(urlState),
+    };
+    if (get(urlState) !== "") {
+      try {
+        const res = await axios.get(import.meta.env.VITE_API_URL, {
+          params: query,
+        });
+        return res.data || {};
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      return {};
     }
   },
 });

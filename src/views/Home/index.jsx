@@ -1,8 +1,19 @@
-import { queryState, fetchUrl } from "../../store";
-import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { urlState, fetchUrl } from "../../store";
+import { Suspense, lazy, useState } from "react";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+const Loading = lazy(() => import("../../components/Loading"));
 const Home = () => {
   document.title = "ShortWay";
-  const [short, setShort] = useState("sdsdsdsdssdsdsdssssssssssssss");
+  const [url, setUrl] = useRecoilState(urlState);
+  const short = useRecoilValue(fetchUrl);
+  const [query, setQuery] = useState("");
+  const getShortUrl = () => {
+    setUrl(query);
+  };
+
   return (
     <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
       <div className="max-w-2xl mx-auto text-center">
@@ -17,8 +28,16 @@ const Home = () => {
 
       <div className="flex flex-col items-center justify-center mt-7 space-y-4 md:space-y-0 md:space-x-4 md:flex-row ">
         <div className="inline-flex items-center justify-center  text-black border-2 border-black ">
-          <input className="w-full h-full px-4 py-4 outline-none" type="text" />
-          <button className="inline-flex items-center justify-center px-3 py-4 text-black transition-all duration-200   hover:bg-black hover:text-white focus:bg-black focus:text-white">
+          <input
+            value={query == "" ? url : query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full h-full px-4 py-4 outline-none"
+            type="text"
+          />
+          <button
+            onClick={getShortUrl}
+            className="inline-flex items-center justify-center px-3 py-4 text-black transition-all duration-200   hover:bg-black hover:text-white focus:bg-black focus:text-white"
+          >
             <svg
               className="w-6 h-6 mr-2 -ml-1"
               xmlns="http://www.w3.org/2000/svg"
@@ -32,21 +51,34 @@ const Home = () => {
         </div>
       </div>
 
-      {/* <p className="mt-6 text-base text-center text-gray-600">
-        It only takes seconds to shorten the url
-      </p> */}
-      <div className="flex flex-col items-center justify-center mt-7 space-y-4 md:space-y-0 md:space-x-4 md:flex-row ">
-        <div className="inline-flex items-center justify-center  text-black border-2 border-black ">
-          <input
-            value={short}
-            className="w-full h-full px-2 py-2 outline-none"
-            type="text"
-          />
-          <button className="inline-flex items-center justify-center px-2 py-2 text-black transition-all duration-200   hover:bg-black hover:text-white focus:bg-black focus:text-white">
-            Copy
-          </button>
+      <Suspense fallback={<Loading />}>
+        <div className="flex flex-col items-center justify-center mt-7 space-y-4 md:space-y-0 md:space-x-4 md:flex-row ">
+          {short.ok && (
+            <div className="inline-flex items-center justify-center  text-black border-2 border-black ">
+              <h1 className="max-w-[35vh] truncate px-2 py-2 outline-none">
+                {short.result.full_short_link}
+              </h1>
+              <CopyToClipboard
+                onCopy={() =>
+                  toast.success("Copied to clipboard", {
+                    position: toast.POSITION.TOP_RIGHT,
+                  })
+                }
+                text={short.result.full_short_link}
+              >
+                <button className="inline-flex items-center justify-center px-2 py-2 text-black transition-all duration-200   hover:bg-black hover:text-white focus:bg-black focus:text-white">
+                  Copy
+                </button>
+              </CopyToClipboard>
+            </div>
+          )}
         </div>
-      </div>
+      </Suspense>
+
+      <p className="mt-6 text-base text-center text-gray-600">
+        The process of shortening a URL only takes a few seconds.
+      </p>
+      <ToastContainer />
     </div>
   );
 };
