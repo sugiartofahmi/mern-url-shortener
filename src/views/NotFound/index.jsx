@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+document.title = "Page Not Found";
 const NotFound = () => {
   return (
     <div className="h-screen w-full flex flex-col justify-center items-center bg-[#1A2238]">
