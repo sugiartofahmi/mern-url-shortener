@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-document.title = "Page Not Found";
 const NotFound = () => {
+  document.title = "Page Not Found";
   return (
     <div className="h-screen w-full flex flex-col justify-center items-center bg-[#1A2238]">
       <h1 className="text-9xl font-extrabold text-white tracking-widest">
