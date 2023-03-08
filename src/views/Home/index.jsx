@@ -13,7 +13,10 @@ const Home = () => {
   const getShortUrl = () => {
     setUrl(query);
   };
-
+  const regex = new RegExp(
+    "([0-9A-Za-z-\\.@:%_+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?"
+  );
+  const validate = regex.test(query);
   return (
     <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
       <div className="max-w-2xl mx-auto text-center">
@@ -29,14 +32,16 @@ const Home = () => {
       <div className="flex flex-col items-center justify-center mt-7 space-y-4 md:space-y-0 md:space-x-4 md:flex-row ">
         <div className="inline-flex items-center justify-center  text-black border-2 border-black ">
           <input
-            value={query == "" ? url : query}
+            value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full h-full px-4 py-4 outline-none"
             type="text"
+            placeholder="Paste url here"
           />
           <button
+            disabled={!validate}
             onClick={getShortUrl}
-            className="inline-flex items-center justify-center px-3 py-4 text-black transition-all duration-200   hover:bg-black hover:text-white focus:bg-black focus:text-white"
+            className="disabled:opacity-30 inline-flex items-center justify-center px-3 py-4 text-black transition-all duration-200   hover:bg-black hover:text-white focus:bg-black focus:text-white"
           >
             <svg
               className="w-6 h-6 mr-2 -ml-1"
