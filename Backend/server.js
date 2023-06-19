@@ -7,7 +7,7 @@ import shortener from "./routes/shortener.js";
 const port = process.env.PORT;
 const app = express();
 config();
-
+connectDB();
 app.use(express.json());
 app.use(cors());
 app.use("/api", shortener);
@@ -20,5 +20,4 @@ app.all("*", (req, res) =>
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-  connectDB();
 });
