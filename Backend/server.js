@@ -10,7 +10,7 @@ config();
 connectDB();
 app.use(express.json());
 app.use(cors());
-app.use("/api", shortener);
+app.use("/", shortener);
 app.all("*", (req, res) =>
   res.status(404).json({
     status: "failed",
