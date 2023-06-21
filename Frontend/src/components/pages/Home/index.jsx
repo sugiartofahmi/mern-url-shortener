@@ -50,7 +50,6 @@ const Home = () => {
           res?.data?.result?.requestUrl
         }`,
       });
-      console.log(res);
     } catch (error) {
       toast.error(error?.response?.data?.message, {
         position: toast.POSITION.TOP_CENTER,
