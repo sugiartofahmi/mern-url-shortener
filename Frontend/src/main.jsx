@@ -1,16 +1,13 @@
-import React from "react";
+import router from "@/router";
+import { StrictMode, Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+import { RouterProvider } from "react-router-dom";
 import "./index.css";
-import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
-
+const Loading = lazy(() => import("@/components/atoms/Loading"));
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <RecoilRoot>
-        <App />
-      </RecoilRoot>
-    </BrowserRouter>
-  </React.StrictMode>
+  <StrictMode>
+    <Suspense fallback={<Loading />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  </StrictMode>
 );
